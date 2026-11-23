@@ -1,6 +1,6 @@
 ---
 name: adversarial-peer-review-role
-description: Defines an adversarial-reviewer agent persona (severity taxonomy, file:line evidence citation, a disconfirmation duty, and a no-self-approval output contract) for producing substantive, trustworthy review verdicts. Invoke when configuring a review subagent, sign-off gate, code-review persona, or editorial/QA role for any pipeline where a separate reviewer must be structurally biased toward finding defects rather than confirming the author's work.
+description: Adversarial reviewer persona: severity taxonomy, file:line evidence, a duty to try to disprove the work, no self-approval. Use when setting up a review subagent, sign-off gate or QA role that must look for defects, not confirm the author.
 ---
 
 # Adversarial Peer-Review Role

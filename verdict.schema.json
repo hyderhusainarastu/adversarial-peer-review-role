@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Candidate verdict",
+  "description": "One record per candidate checked by a verifier that tries to disprove it.",
+  "type": "object",
+  "required": ["candidate_id", "verdict", "evidence_method", "evidence", "disproof_attempts"],
+  "additionalProperties": false,
+  "properties": {
+    "candidate_id": { "type": "string", "minLength": 1 },
+    "verdict": { "enum": ["CONFIRMED", "REJECTED", "UNVERIFIED"] },
+    "evidence_method": {
+      "enum": ["primary-source-read", "direct-query", "reproduced-computation", "cross-source-comparison", "secondary-source-only", "none"],
+      "description": "How the evidence was obtained. secondary-source-only and none can never support CONFIRMED."
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["locator", "quote"],
+        "additionalProperties": false,
+        "properties": {
+          "locator": { "type": "string", "description": "file:line, page:paragraph, URL plus anchor, or query id" },
+          "quote": { "type": "string" },
+          "source_date": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "disproof_attempts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["objection", "outcome"],
+        "additionalProperties": false,
+        "properties": {
+          "objection": { "type": "string" },
+          "outcome": { "enum": ["ruled-out", "stands"] },
+          "why": { "type": "string" }
+        }
+      }
+    },
+    "newest_primary_source_date": { "type": "string", "format": "date" },
+    "completeness_gaps": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Filled by the completeness critic: candidates or sources that should have been examined and were not."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "verdict": { "const": "CONFIRMED" } } },
+      "then": {
+        "properties": { "evidence_method": { "not": { "enum": ["secondary-source-only", "none"] } }, "evidence": { "minItems": 1 } }
+      }
+    }
+  ]
+}

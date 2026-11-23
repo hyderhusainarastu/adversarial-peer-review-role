@@ -45,21 +45,28 @@ stand up a review step you get:
    is not allowed to touch the thing it reviewed or sign off on its own
    finding.
 
+## Works with
+
+| Surface | How | Status |
+|---|---|---|
+| Claude Code | native skill (`./install.sh --claude`) | not tested |
+| Codex | native skill via `.agents/skills` (`./install.sh --agents`) | not tested |
+| Gemini CLI | native skill via `.agents/skills`, pointer in `GEMINI.md` | not tested |
+| Cursor | native skill via `.agents/skills`, reads `AGENTS.md` | not tested |
+| Copilot | pointer to `AGENTS.md` (`./install.sh --copilot`) | not tested |
+| ChatGPT / Claude.ai / Gemini (chat) | paste `PROMPT.md` | not tested |
+
 ## Installation
 
-This is an Agent Skill following the portable `SKILL.md` convention. To use
-it:
+```sh
+git clone https://github.com/hyderhusainarastu/adversarial-peer-review-role
+cd adversarial-peer-review-role
+./install.sh --claude              # ~/.claude/skills/adversarial-peer-review-role
+./install.sh --agents --project .  # .agents/skills (Codex, Cursor, Gemini CLI)
+./install.sh --help                # all options; --dry-run and --uninstall supported
+```
 
-- **Claude Code:** copy this folder into `.claude/skills/adversarial-peer-review-role/`
-  in your project (or into your user-level skills directory to make it
-  available across projects).
-- **Other agent runtimes:** copy this folder into whatever skills directory
-  your runtime discovers skills from — the convention (a `SKILL.md` with
-  YAML frontmatter plus supporting files) is portable across any runtime
-  that supports it.
-
-No dependencies, no build step, no bundled script — this skill is pure
-instructional content plus a template.
+For chat UIs, paste [`PROMPT.md`](PROMPT.md). No dependencies, no build step.
 
 ## Worked usage example (synthetic)
 
@@ -113,10 +120,38 @@ All names, files, and findings in both examples are synthetic.
   software code-review persona.
 - `examples/editorial-review-instantiation.md` — synthetic worked example
   for a manuscript/document-review persona.
+- `examples/data-discovery-verifier.md` — synthetic example of a verifier
+  that tries to disprove each candidate; the newest dated primary source
+  wins, with a completeness critic.
+- `verdict.schema.json` — JSON Schema for the verifier's per-candidate
+  verdict records (`evidence_method` enum).
+- `PROMPT.md` — self-contained paste version.
+- `AGENTS.md` and `install.sh` — agent instructions and the installer.
 
 No scripts are bundled with this skill — it is a persona/instruction
 package, not a tool.
 
+## Related
+
+- [multi-agent-orchestration-playbook](https://github.com/hyderhusainarastu/multi-agent-orchestration-playbook): see [pilot-before-scale](https://github.com/hyderhusainarastu/multi-agent-orchestration-playbook/blob/main/docs/pilot-before-scale.md) before running a reviewer over a full batch.
+- [agent-report-evidence-gate](https://github.com/hyderhusainarastu/agent-report-evidence-gate)
+- [cross-model-second-opinion](https://github.com/hyderhusainarastu/cross-model-second-opinion)
+- [hallucinated-citation-checker](https://github.com/hyderhusainarastu/hallucinated-citation-checker)
+
+## Limits
+
+Instructions only: nothing enforces the no-self-approval rule except the
+file permissions you give the reviewer. The platform rows above are
+untested.
+
+## Keywords
+
+adversarial review, code review agent, peer review, red team, reviewer
+persona, severity taxonomy, agent skill, SKILL.md, AGENTS.md
+
 ## License
 
 MIT. See [`LICENSE`](LICENSE).
+
+---
+Part of palimnote-skills - more at https://github.com/hyderhusainarastu
